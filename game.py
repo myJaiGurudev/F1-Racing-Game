@@ -1,100 +1,246 @@
-import pygame	#import pygame package
-pygame.init()	#initiate package
+import pygame
+import time
+import random
+import os
+pygame.init()
+grey=(118,119,110)
+red=(245,50,0)
+white=(255, 255, 255)
+por=(255,0,0)
+rd=(255, 120, 0)
+black=(100,0,0)
+yellow=(255,200,0)
+clock=pygame.time.Clock()
+display=pygame.display.set_mode((1000,600))
+pygame.display.set_caption("F1 Racing Game")
+carimg=pygame.image.load("car1.png")
+carimg=pygame.transform.scale(carimg,(27,60))
+bgleft=pygame.image.load("left.png")
+bgright=pygame.image.load("right.png")
+width=23
+fnt=pygame.font.SysFont("Algerian", 70)
+font=pygame.font.SysFont("Algerian", 50)
+fot=pygame.font.SysFont("Times New Roman", 70)
+def welcome():
+    pygame.mixer.music.load('gamestart.mp3')
+    pygame.mixer.music.play()
+    exit_game=False
+    while not exit_game:
+        bgim=pygame.image.load("bj.jpg")
+        bgim=pygame.transform.scale(bgim, (1000, 600))
+        display.blit(bgim, (0, 0))
+        text_screen("Made  By:  Anurag  Singh", yellow, 200, 530)
+        textcreen("F1  Racing  Game !", rd, 200, 40)
+        text_screen("Jai Guru Dev", white, 350, 150)
+        text_screen("Press  Space  Bar  To  Play.", por, 180, 450)
+        for event in pygame.event.get():
+            if event.type==pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type==pygame.KEYDOWN:
+                if event.key==pygame.K_SPACE:
+                    loop()
+            pygame.display.update()
+            clock.tick(60)
+def policecar(p_x,p_y,police):
+    if police==0:
+        p_come=pygame.image.load("car2.png")
+        p_come=pygame.transform.scale(p_come,(27,60))
+    if police==1:
+        p_come=pygame.image.load("car3.png")
+        p_come=pygame.transform.scale(p_come,(27,60))
+    if police==2:
+        p_come=pygame.image.load("car1.png")
+        p_come=pygame.transform.scale(p_come,(27,60))
+    display.blit(p_come,(p_x,p_y))
+def pocar(a,b,police):
+    if police==0:
+        p_come=pygame.image.load("car3.png")
+        p_come=pygame.transform.scale(p_come,(27,60))
+    if police==1:
+        p_come=pygame.image.load("car1.png")
+        p_come=pygame.transform.scale(p_come,(27,60))
+    if police==2:
+        p_come=pygame.image.load("car2.png")
+        p_come=pygame.transform.scale(p_come,(27,60))
+    display.blit(p_come,(a,b))
+def pulice(m,l,police):
+    if police==0:
+        p_come=pygame.image.load("car1.png")
+        p_come=pygame.transform.scale(p_come,(27,60))
+    if police==1:
+        p_come=pygame.image.load("car2.png")
+        p_come=pygame.transform.scale(p_come,(27,60))
+    if police==2:
+        p_come=pygame.image.load("car3.png")
+        p_come=pygame.transform.scale(p_come,(27,60))
+    display.blit(p_come,(m,l))
+def pcar(p,q,police):
+    if police==0:
+        p_come=pygame.image.load("car1.png")
+        p_come=pygame.transform.scale(p_come,(27,60))
+    if police==1:
+        p_come=pygame.image.load("car2.png")
+        p_come=pygame.transform.scale(p_come,(27,60))
+    if police==2:
+        p_come=pygame.image.load("car3.png")
+        p_come=pygame.transform.scale(p_come,(27,60))
+    display.blit(p_come,(p,q))
+def textcreen(text, color, a, b):
+    screen_text=fnt.render(text, True, color)
+    display.blit(screen_text, [a,b])
+def text_screen(text, color, a, b):
+    screen_text=font.render(text, True, color)
+    display.blit(screen_text, [a,b])
+def textscreen(text, color, a, b):
+    screen_text=fot.render(text, True, color)
+    display.blit(screen_text, [a,b])
+def text_object(text,font):
+    b=font.render(text,True,color)
+    return b,b.get_rect()
+def bg():
+    display.blit(bgleft,(0,0))
+    display.blit(bgright,(850,0))
+def car(x,y):
+    display.blit(carimg,(x,y))
+def loop():
+    pygame.mixer.music.load('back.mp3')
+    pygame.mixer.music.play()
+    exit_game=False
+    game_over=False
+    x=450
+    x_c=0
+    vel=13
+    fps=60
+    score=0
+    police=0
+    m=random.randrange(600,(750-width))
+    a=random.randrange(130,(250-width))
+    b=600
+    l=600
+    p_x=random.randrange(240,(400-width))
+    p=random.randrange(400,(600-width))
+    q=600
+    p_y=600
+    p_width=23
+    p_height=47
+    y_c=-3
+    y=500
+    if(not os.path.exists("hscore.txt")):
+        with open("hscore.txt", "w") as f:
+            f.write("0")
+    with open("hscore.txt", "r") as f:
+            hiscore=f.read()
+    while not exit_game:
+        if game_over:
+            with open("hscore.txt", "w") as f:
+                f.write(str(hiscore))
+            display.fill(white)
+            bgim=pygame.image.load("crash.jpg")
+            bgim=pygame.transform.scale(bgim, (1000, 700))
+            display.blit(bgim, (0, 0))
+            if score==int(hiscore):
+                text_screen("Nice !  You  made  a  Hiscore :"+str(hiscore)+"", rd, 120, 100)
+            textscreen("Score:"+str(score)+"   Hiscore:"+str(hiscore)+"", yellow, 10, 10)
+            textcreen("Car  Crashed !", por, 250, 250)
+            textscreen("Press  enter  to  continue.", rd, 200, 400)
+            for event in pygame.event.get():
+                if event.type==pygame.QUIT:
+                    exit_game=True
+                if event.type==pygame.KEYDOWN:
+                    if event.key==pygame.K_RETURN:
+                        loop()
+        else:
+            for event in pygame.event.get():
+                if event.type==pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type==pygame.KEYDOWN:
+                    if event.key==pygame.K_LEFT:
+                        x_c=-6
+                        y_c=0
+                    if event.key==pygame.K_RIGHT:
+                        x_c=6
+                        y_c=0
+                    if event.key==pygame.K_UP:
+                        y_c=-5
+                        x_c=0
+                    if event.key==pygame.K_DOWN:
+                        y_c=5
+                        x_c=0
+            x+=x_c
+            y+=y_c
+            display.fill(grey)
+            bg()
+            l-=(vel/5)
+            q-=(vel/3)
+            b-=(vel/5)
+            p_y-=(vel/4)
+            policecar(p_x,p_y,police)
+            p_y+=vel
+            l+=vel+2
+            b+=vel+2
+            q+=vel+1
+            pocar(a,b,police)
+            pcar(p,q,police)
+            pulice(m,l,police)
+            car(x,y)
+            if x<130 or x>850-width or y<0 or y>600:
+                game_over=True
+                pygame.mixer.music.load('gameover.mp3')
+                pygame.mixer.music.play()
+            if p_y>600:
+                score+=1
+                if score>int(hiscore):
+                    hiscore=score
+                p_y=0-p_height
+                p_x=random.randrange(130,250)
+                police=random.randrange(0,2)
+            if y<p_y+p_height:
+                if x>p_x and x<p_x+p_width or width>p_x and x+width<p_x+p_width:
+                    game_over=True
+                    pygame.mixer.music.load('gameover.mp3')
+                    pygame.mixer.music.play()
+            if b>600:
+                score+=1
+                if score>int(hiscore):
+                    hiscore=score
+                b=0-p_height
+                a=random.randrange(240,450)
+                police=random.randrange(0,2)
+            if y<b+p_height:
+                if x>a and x<a+p_width or width>a and x+width<a+p_width:
+                    game_over=True
+                    pygame.mixer.music.load('gameover.mp3')
+                    pygame.mixer.music.play()
+            if q>600:
+                score+=1
+                if score>int(hiscore):
+                    hiscore=score
+                q=0-p_height
+                p=random.randrange(400,650)
+                police=random.randrange(0,2)
+            if y<q+p_height:
+                if x>p and x<p+p_width or width>p and x+width<p+p_width:
+                    game_over=True
+                    pygame.mixer.music.load('gameover.mp3')
+                    pygame.mixer.music.play()
+            if l>600:
+                score+=1
+                if score>int(hiscore):
+                    hiscore=score
+                l=0-p_height
+                m=random.randrange(600,800)
+                police=random.randrange(0,2)
+            if y<l+p_height:
+                if x>m and x<m+p_width or width>m and x+width<m+p_width:
+                    game_over=True
+                    pygame.mixer.music.load('gameover.mp3')
+                    pygame.mixer.music.play()
+            text_screen("Score:"+str(score)+"   Hiscore:"+str(hiscore)+"", yellow, 5, 5)
+        pygame.display.update()
+        clock.tick(fps)
+    pygame.quit()
+    quit()
+welcome()
 
-grey=(118,119,110)	#colour code in RBG form
-black=(0,0,0)		#colour code in RBG form
-display=pygame.display.set_mode((1000,600))		#set width & height of display
-pygame.display.set_caption("Car Game")		#set window name
-carimg=pygame.image.load("car1.png")	#load car image
-backgroundleft=pygame.image.load("left.png")	#load background left side image
-backgroundright=pygame.image.load("right.png")	#load background right side image 
-car_width=23
-import time 	#import the time for restart the game
-import random 	#import for random position police car comes
-
-def policecar(police_startx,police_starty,police): 	#define police function
-	if police==0:		#at 0 stage
-		police_come=pygame.image.load("car2.png")	#police car2 come
-	if police==1:		#at 1 stage
-		police_come=pygame.image.load("car3.png")	#police car3 come
-	if police==2:
-		police_come=pygame.image.load("car1.png")	#police car1 come
-
-	display.blit(police_come,(police_startx,police_starty))	#display the police car
-
-def crash():		#create crash function to display this message
-	message_display("Car Crashed")	#display this message call the message_display function
-	
-def message_display(text):		#create function for message edit
-	largetext=pygame.font.Font("freesansbold.ttf",80)	#message in this style and the size will be 80
-	textsurf,textrect=text_object(text,largetext)	#create function to edit message 
-	textrect.center=((400),(300))	#show the message position in display
-	display.blit(textsurf,textrect)	#display this message 
-	pygame.display.update()	#update display
-	time.sleep(3)		#after crashed 3 sec restart the game
-	loop()		#call the loop function to restart the game
-
-def text_object(text,font):		#display after crash the car
-	textsurface=font.render(text,True,black)	#display in this colour
-	return textsurface,textsurface.get_rect()	#after that restart the game & ready to give some input
-
-
-
-def background():
-	display.blit(backgroundleft,(0,0))	#set left side position of background image at x axis & y axis 
-	display.blit(backgroundright,(700,0))	#set right side position of background image at x axis & y axis
-
-def car(x,y):		#create car function
-	display.blit(carimg,(x,y))	#set position of car
-
-def loop():		#all the function are called using this function
-	x=400		#x axis position for car
-	y=540		#y axis position of car
-	x_change=0	#set x position at x axis
-	y_change=0	#set y position at y axis
-	policecar_speed=9	#police car speed
-	police=0	#police car is 0 stage
-	police_startx=random.randrange(130,(700-car_width)) 	#police car in x axis comes randomly
-	police_starty=-600 #police car comes in y axis -600 becuase opposite side
-	police_width=23 	#police car width
-	police_height=47	#police car height
-
-	bumped=False	#if game is not any problem to start
-	while not bumped:	#game is start
-		for event in pygame.event.get(): 	#if any input is given
-			if event.type==pygame.QUIT:		#if quit input is given
-			#	bumped=True		#game is stop
-				pygame.quit()
-				quit()
-
-			if event.type==pygame.KEYDOWN:	#if any key pressed
-				if event.key==pygame.K_LEFT:	#if pressed key is left
-					x_change=-5		#move left side -5
-				if event.key==pygame.K_RIGHT:	#if pressed key is right
-					x_change=5		#move right side +5
-			if event.type==pygame.KEYUP:	#if key unpressed then
-				x_change=0
-		x+=x_change
-
-		display.fill(grey)	#apply colour to display
-		background()
-		police_starty-=(policecar_speed/4)		#police car speed at y axis
-		policecar(police_startx,police_starty,police)	#call police function
-		police_starty+=policecar_speed			#police car speed increse
-		car(x,y)	#call the function of car	
-		if x<130 or x>700-car_width:		#if car goes out of this range
-		#	bumped=True				#stop the game
-			crash()					#call crash function
-		if police_starty>600:		#police car pass it without crashed
-			police_starty=0-police_height	#only one car is crossed
-			police_startx=random.randrange(130,(1000-300))	#anthor car is come 
-			police=random.randrange(0,2)	#diffrent car come
-
-		if y<police_starty+police_height: #if police car not pass
-			if x > police_startx and x < police_startx + police_width or x + car_width > police_startx and x + car_width < police_startx + police_width :
-				crash()	#crash the car			
-
-		pygame.display.update()		#update the display
-loop()		#call the loop function
-pygame.quit()	#package is stop
-quit()	#game is stop
